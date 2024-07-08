@@ -38,13 +38,16 @@ struct SavedLocationsView: View {
                 ScrollView(.vertical, showsIndicators: false){
                     Spacer()
                         .frame(height: 10)
-                    SavedLocationCard()
-                    SavedLocationCard()
-                    SavedLocationCard()
-                    SavedLocationCard()
-                    SavedLocationCard()
-                    SavedLocationCard()
-                    SavedLocationCard()
+                 
+                    SavedLocationCard(
+                        city: "Islamabad",
+                        weatherDescription: "Clear",
+                        humidity: 56,
+                        windSpeed: 1.22,
+                        temperature: 24,
+                        weatherImageName: AppConstants.WeatherImages.night
+                    )
+
                     Spacer()
                         .frame(height: 40)
                 }

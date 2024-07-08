@@ -16,7 +16,7 @@ struct AppConstants {
         static let humidityIcon = "HumidityIcon"
         static let locationIcon = "LocationIcon"
         static let moreIcon = "MoreIcon"
-        static let tempratureIcom = "TempratureIcom"
+        static let tempratureIcon = "TempratureIcom"
         static let windIcon = "WindIcon"
         static let bgPlaceholder = "BgPlaceholder"
         static let darkening = "Darkening"

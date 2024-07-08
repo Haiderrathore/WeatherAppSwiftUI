@@ -30,6 +30,7 @@ DerivedData/
 *.ipa
 *.dSYM.zip
 *.dSYM
+ApiRef.swift
 
 ## Playgrounds
 timeline.xctimeline

@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct HomeView: View {
+    @StateObject private var viewModel = WeatherViewModel()
+//    @EnvironmentObject var locationManager = LocationManager
+    
     var body: some View {
-        ZStack{
+        ZStack {
             Image(AppConstants.Images.bgPlaceholder)
                 .resizable()
                 .ignoresSafeArea()
@@ -30,113 +33,123 @@ struct HomeView: View {
                     }
                     .padding()
                     
-                    
                     Spacer()
                     Button {
-                        
+                        // Action for the button
                     } label: {
                         Image(AppConstants.Images.moreIcon)
                             .resizable()
                             .frame(width: 32, height: 32)
-                        
                     }
                     .padding()
                 }
                 .padding(.horizontal, 15)
-                Spacer()
-                Text("JUNE 07")
-                    .font(.custom(AppConstants.FontName.medium, size: 40))
-                    .foregroundStyle(Color.white)
-                
-                HStack {
-                    Text("Updated  ")
-                        .font(.custom(AppConstants.FontName.light, size: 16))
-                        .foregroundStyle(Color.white)
-                    
-                    Text("6/7/2024 4:55 PM")
-                        .font(.custom(AppConstants.FontName.light, size: 16))
-                        .foregroundStyle(Color.white)
-                }
-                
-                Image(AppConstants.WeatherImages.night)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 180,height: 120)
-                
-                Text("Clear")
-                    .font(.custom(AppConstants.FontName.bold, size: 40))
-                    .foregroundStyle(Color.white)
-                
-                HStack (alignment: .top, spacing: 1){
-                    Text("24")
-                        .font(.custom(AppConstants.FontName.medium, size: 86))
-                        .foregroundStyle(Color.white)
-                    Text("°C")
-                        .font(.custom(AppConstants.FontName.medium, size: 24))
-                        .foregroundStyle(Color.white)
-                        .padding(.top, 12)
-                }
-                .padding(.leading)
-                .offset(CGSize(width: 0, height: -25))
                 
                 Spacer()
-                HStack{
-                    VStack{
-                        Image(AppConstants.Images.humidityIcon)
-                        Text("HUMIDITY")
-                            .font(.custom(AppConstants.FontName.medium, size: 14))
-                            .foregroundStyle(Color.white)
-                            .offset(CGSize(width: 0, height: -4))
-                        Text("56%")
-                            .font(.custom(AppConstants.FontName.medium, size: 14))
+                
+                if viewModel.isLoading {
+                    ProgressView()
+                } else if let weather = viewModel.weatherResponse {
+                    VStack {
+                        Text("JULY 07")
+                            .font(.custom(AppConstants.FontName.medium, size: 40))
                             .foregroundStyle(Color.white)
                         
+                        HStack {
+                            Text("Updated  ")
+                                .font(.custom(AppConstants.FontName.light, size: 16))
+                                .foregroundStyle(Color.white)
+                            
+                            Text(Date(timeIntervalSince1970: weather.current.dt).formatted())
+                                .font(.custom(AppConstants.FontName.light, size: 16))
+                                .foregroundStyle(Color.white)
+                        }
+                        
+                        Image(AppConstants.WeatherImages.night)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 180, height: 120)
+                        
+                        Text(weather.current.weather.first?.description.capitalized ?? "N/A")
+                            .font(.custom(AppConstants.FontName.bold, size: 40))
+                            .foregroundStyle(Color.white)
+                        
+                        HStack(alignment: .top, spacing: 1) {
+                            Text("\(Int(weather.current.temp))")
+                                .font(.custom(AppConstants.FontName.medium, size: 86))
+                                .foregroundStyle(Color.white)
+                            Text("°C")
+                                .font(.custom(AppConstants.FontName.medium, size: 24))
+                                .foregroundStyle(Color.white)
+                                .padding(.top, 12)
+                        }
+                        .padding(.leading)
+                        .offset(CGSize(width: 0, height: -25))
                     }
-                    Spacer()
-                    VStack{
-                        Image(AppConstants.Images.windIcon)
-                        Text("WIND")
-                            .font(.custom(AppConstants.FontName.medium, size: 14))
-                            .foregroundStyle(Color.white)
-                            .offset(CGSize(width: 0, height: -4))
-                        Text("4.63km/h")
-                            .font(.custom(AppConstants.FontName.medium, size: 14))
-                            .foregroundStyle(Color.white)
-                    }
-                    Spacer()
-                    VStack{
-                        Image(AppConstants.Images.tempratureIcom)
-                        Text("FEELS LIKE")
-                            .font(.custom(AppConstants.FontName.medium, size: 14))
-                            .foregroundStyle(Color.white)
-                            .offset(CGSize(width: 0, height: -4))
-                        Text("22°")
-                            .font(.custom(AppConstants.FontName.medium, size: 14))
-                            .foregroundStyle(Color.white)
-                    }
-                }
-                .padding(.horizontal, 35)
-                
-                
-                ZStack {
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.getThemeColor(color: .homeSubbg).opacity(0.6))
-                        .frame(width: 345, height: 153)
-                        .padding()
                     
-                    ScrollView(.horizontal, showsIndicators: false){
-                        HStack(alignment: .center, spacing: 38){
-                            NextWeekCardView()
-                            NextWeekCardView()
-                            NextWeekCardView()
-                            NextWeekCardView()
-                            NextWeekCardView()
-                            NextWeekCardView()
+                    Spacer()
+                    
+                    HStack {
+                        VStack {
+                            Image(AppConstants.Images.humidityIcon)
+                            Text("HUMIDITY")
+                                .font(.custom(AppConstants.FontName.medium, size: 14))
+                                .foregroundStyle(Color.white)
+                                .offset(CGSize(width: 0, height: -4))
+                            Text("\(weather.current.humidity)%")
+                                .font(.custom(AppConstants.FontName.medium, size: 14))
+                                .foregroundStyle(Color.white)
+                        }
+                        Spacer()
+                        VStack {
+                            Image(AppConstants.Images.windIcon)
+                            Text("WIND")
+                                .font(.custom(AppConstants.FontName.medium, size: 14))
+                                .foregroundStyle(Color.white)
+                                .offset(CGSize(width: 0, height: -4))
+                            Text("\(weather.current.wind_speed) km/h")
+                                .font(.custom(AppConstants.FontName.medium, size: 14))
+                                .foregroundStyle(Color.white)
+                        }
+                        Spacer()
+                        VStack {
+                            Image(AppConstants.Images.tempratureIcon)
+                            Text("FEELS LIKE")
+                                .font(.custom(AppConstants.FontName.medium, size: 14))
+                                .foregroundStyle(Color.white)
+                                .offset(CGSize(width: 0, height: -4))
+                            Text("\(Int(weather.current.feels_like))°")
+                                .font(.custom(AppConstants.FontName.medium, size: 14))
+                                .foregroundStyle(Color.white)
                         }
                     }
-                    .padding(.horizontal, 45)
+                    .padding(.horizontal, 35)
+                    
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.getThemeColor(color: .homeSubbg).opacity(0.6))
+                            .frame(width: 345, height: 153)
+                            .padding()
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(alignment: .center, spacing: 38) {
+                                ForEach(weather.daily, id: \.dt) { day in
+                                    NextWeekCardView(day: day)
+                                }
+                            }
+                        }
+                        .padding(.horizontal, 45)
+                    }
+                } else if let error = viewModel.errorMessage {
+                    Text(error)
+                        .foregroundStyle(Color.red)
                 }
+                
+                Spacer()
             }
+        }
+        .onAppear {
+            viewModel.fetchWeather(lat: 33.6995, lon: 73.0363) // Islamabad coordinates
         }
     }
 }

@@ -87,6 +87,15 @@ struct Weather: Codable {
     let icon: String
 }
 
+struct Alerts: Codable {
+    let sender_name: String
+    let event: String
+    let start: Int
+    let end: Int
+    let description: String
+    let tags: String
+}
+
 class WeatherService {
     private let apiKey = "2d8bc7c061e2c33d3861f713a3cbec18"
     private let baseURL = "https://api.openweathermap.org/data/3.0/onecall"
