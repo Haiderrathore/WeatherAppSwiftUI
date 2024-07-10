@@ -1,0 +1,75 @@
+//
+//  SavedLocationsView.swift
+//  WeatherApp
+//
+//  Created by Haider Rathore on 05/07/2024.
+//
+
+import SwiftUI
+
+struct SavedLocationsView: View {
+    @State private var cityResponse: Cities?
+
+    var body: some View {
+
+        ZStack{
+            Image(AppConstants.Images.savedLocationsBg)
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
+            
+            VStack{
+                HStack{
+                    Text("Saved Locations")
+                        .font(.custom(AppConstants.FontName.medium, size: 18))
+                        .foregroundStyle(Color.white)
+                    
+                    Spacer()
+                    
+                    Button {
+                        
+                    } label: {
+                        Image(AppConstants.Images.searchIcon)
+                            .resizable()
+                            .frame(width: 32,height: 32)
+                    }
+                   
+                }
+                .padding(.init(top: 60, leading: 30, bottom: 0, trailing: 20))
+                
+                
+                ScrollView(.vertical, showsIndicators: false){
+                    Spacer()
+                        .frame(height: 10)
+                    ForEach(cityResponse?.cities ?? []) { city in
+                        SavedLocationCard(
+                            city: city.city,
+                            weatherDescription: "Clear",
+                            humidity: 56,
+                            windSpeed: 1.22,
+                            temperature: 24,
+                            weatherImageName: AppConstants.WeatherImages.night
+                        )
+                    }
+                    
+                        
+
+                    Spacer()
+                        .frame(height: 40)
+                }
+                .padding(.top, 20)
+                .onAppear {
+                            if let loadedCities: Cities = loadJson(filename: "cities") {
+                                self.cityResponse = loadedCities
+                            }
+                        }
+                
+                Spacer()
+            }
+        }
+    }
+}
+
+#Preview {
+    SavedLocationsView()
+}
