@@ -10,6 +10,7 @@ import SwiftUI
 
 class WeatherViewModel: ObservableObject {
     @Published var weatherResponse: WeatherResponse?
+//    @Published var response: NewWeatherResponse?
     @Published var isLoading = true
     @Published var errorMessage: String?
     
@@ -31,6 +32,8 @@ class WeatherViewModel: ObservableObject {
                 }
             }, receiveValue: { weatherResponse in
                 self.weatherResponse = weatherResponse
+//                print("Weather Fetched  \(weatherResponse)")
+
             })
             .store(in: &cancellables)
     }

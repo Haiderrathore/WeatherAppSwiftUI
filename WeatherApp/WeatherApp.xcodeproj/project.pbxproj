@@ -23,6 +23,8 @@
 		1DC4C37A2C36EB5400C27EE1 /* NextWeekCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC4C3792C36EB5400C27EE1 /* NextWeekCardView.swift */; };
 		1DC4C37C2C37B1C100C27EE1 /* SavedLocationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC4C37B2C37B1C100C27EE1 /* SavedLocationsView.swift */; };
 		1DC4C37E2C37B31E00C27EE1 /* SavedLocationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC4C37D2C37B31E00C27EE1 /* SavedLocationCard.swift */; };
+		1DC5C78E2C3D5C880059F3C7 /* CityData.json in Resources */ = {isa = PBXBuildFile; fileRef = 1DC5C78D2C3D5C880059F3C7 /* CityData.json */; };
+		1DC5C7902C3D602A0059F3C7 /* CitiesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC5C78F2C3D602A0059F3C7 /* CitiesModel.swift */; };
 		1DE7F9892C3841CB0043178F /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE7F9882C3841CB0043178F /* WeatherService.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +47,8 @@
 		1DC4C3792C36EB5400C27EE1 /* NextWeekCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextWeekCardView.swift; sourceTree = "<group>"; };
 		1DC4C37B2C37B1C100C27EE1 /* SavedLocationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedLocationsView.swift; sourceTree = "<group>"; };
 		1DC4C37D2C37B31E00C27EE1 /* SavedLocationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedLocationCard.swift; sourceTree = "<group>"; };
+		1DC5C78D2C3D5C880059F3C7 /* CityData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CityData.json; sourceTree = "<group>"; };
+		1DC5C78F2C3D602A0059F3C7 /* CitiesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesModel.swift; sourceTree = "<group>"; };
 		1DE7F9882C3841CB0043178F /* WeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -192,6 +196,8 @@
 			isa = PBXGroup;
 			children = (
 				1DE7F9882C3841CB0043178F /* WeatherService.swift */,
+				1DC5C78F2C3D602A0059F3C7 /* CitiesModel.swift */,
+				1DC5C78D2C3D5C880059F3C7 /* CityData.json */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -257,6 +263,7 @@
 				1DC4C3712C36BF3D00C27EE1 /* Roboto-Medium.ttf in Resources */,
 				1DC4C3642C36B9EF00C27EE1 /* Colors.xcassets in Resources */,
 				1DC4C3732C36BF3D00C27EE1 /* Roboto-Light.ttf in Resources */,
+				1DC5C78E2C3D5C880059F3C7 /* CityData.json in Resources */,
 				1DC4C3722C36BF3D00C27EE1 /* Roboto-Bold.ttf in Resources */,
 				1D433F6B2C37E21900412893 /* Preview Assets.xcassets in Resources */,
 				1DC4C3592C36B34000C27EE1 /* Assets.xcassets in Resources */,
@@ -280,6 +287,7 @@
 				1DC4C37A2C36EB5400C27EE1 /* NextWeekCardView.swift in Sources */,
 				1DC4C37C2C37B1C100C27EE1 /* SavedLocationsView.swift in Sources */,
 				1DC4C36A2C36BAFC00C27EE1 /* AppConstants.swift in Sources */,
+				1DC5C7902C3D602A0059F3C7 /* CitiesModel.swift in Sources */,
 				1DC4C3782C36EA4500C27EE1 /* UIColor+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,7 +422,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherApp/Preview Content\"";
-				DEVELOPMENT_TEAM = MXW9X57F2Y;
+				DEVELOPMENT_TEAM = 8C93AHGYPE;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherApp/Info.plist;
@@ -445,7 +453,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"WeatherApp/Preview Content\"";
-				DEVELOPMENT_TEAM = MXW9X57F2Y;
+				DEVELOPMENT_TEAM = 8C93AHGYPE;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = WeatherApp/Info.plist;

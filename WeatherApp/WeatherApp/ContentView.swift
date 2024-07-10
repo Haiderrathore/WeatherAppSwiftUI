@@ -11,8 +11,9 @@ struct ContentView: View {
     @StateObject var locationManager = LocationManager()
     var body: some View {
         VStack {
-           HomeView()
-                .environmentObject(locationManager)
+//           HomeView()
+//                .environmentObject(locationManager)
+            SavedLocationsView()
         }
     }
 }

@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct SavedLocationsView: View {
+    @State private var cityResponse: Cities?
+
     var body: some View {
+
         ZStack{
             Image(AppConstants.Images.savedLocationsBg)
                 .resizable()
@@ -38,20 +41,29 @@ struct SavedLocationsView: View {
                 ScrollView(.vertical, showsIndicators: false){
                     Spacer()
                         .frame(height: 10)
-                 
-                    SavedLocationCard(
-                        city: "Islamabad",
-                        weatherDescription: "Clear",
-                        humidity: 56,
-                        windSpeed: 1.22,
-                        temperature: 24,
-                        weatherImageName: AppConstants.WeatherImages.night
-                    )
+                    ForEach(cityResponse?.cities ?? []) { city in
+                        SavedLocationCard(
+                            city: city.city,
+                            weatherDescription: "Clear",
+                            humidity: 56,
+                            windSpeed: 1.22,
+                            temperature: 24,
+                            weatherImageName: AppConstants.WeatherImages.night
+                        )
+                    }
+                    
+                        
 
                     Spacer()
                         .frame(height: 40)
                 }
                 .padding(.top, 20)
+                .onAppear {
+                            if let loadedCities: Cities = loadJson(filename: "cities") {
+                                self.cityResponse = loadedCities
+                            }
+                        }
+                
                 Spacer()
             }
         }

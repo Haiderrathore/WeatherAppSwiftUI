@@ -9,7 +9,8 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var viewModel = WeatherViewModel()
-//    @EnvironmentObject var locationManager = LocationManager
+    @State private var cities: CityResponse?
+    
     
     var body: some View {
         ZStack {
@@ -47,9 +48,9 @@ struct HomeView: View {
                 
                 Spacer()
                 
-                if viewModel.isLoading {
-                    ProgressView()
-                } else if let weather = viewModel.weatherResponse {
+//                if viewModel.isLoading {
+//                    ProgressView()
+//                } else if let weather = viewModel.response {
                     VStack {
                         Text("JULY 07")
                             .font(.custom(AppConstants.FontName.medium, size: 40))
@@ -60,7 +61,8 @@ struct HomeView: View {
                                 .font(.custom(AppConstants.FontName.light, size: 16))
                                 .foregroundStyle(Color.white)
                             
-                            Text(Date(timeIntervalSince1970: weather.current.dt).formatted())
+//                            Text("Date(timeIntervalSince1970: weather.current.dt).formatted()")
+                            Text("4/5/66")
                                 .font(.custom(AppConstants.FontName.light, size: 16))
                                 .foregroundStyle(Color.white)
                         }
@@ -70,12 +72,14 @@ struct HomeView: View {
                             .scaledToFill()
                             .frame(width: 180, height: 120)
                         
-                        Text(weather.current.weather.first?.description.capitalized ?? "N/A")
+//                        Text(weather.current.weather.first?.description.capitalized ?? "N/A")
+                        Text("CLEAR")
                             .font(.custom(AppConstants.FontName.bold, size: 40))
                             .foregroundStyle(Color.white)
                         
                         HStack(alignment: .top, spacing: 1) {
-                            Text("\(Int(weather.current.temp))")
+//                            Text("\(Int(weather.current.temp))")
+                            Text("24")
                                 .font(.custom(AppConstants.FontName.medium, size: 86))
                                 .foregroundStyle(Color.white)
                             Text("°C")
@@ -96,7 +100,8 @@ struct HomeView: View {
                                 .font(.custom(AppConstants.FontName.medium, size: 14))
                                 .foregroundStyle(Color.white)
                                 .offset(CGSize(width: 0, height: -4))
-                            Text("\(weather.current.humidity)%")
+//                            Text("\(weather.current.humidity)%")
+                            Text("44%")
                                 .font(.custom(AppConstants.FontName.medium, size: 14))
                                 .foregroundStyle(Color.white)
                         }
@@ -107,7 +112,8 @@ struct HomeView: View {
                                 .font(.custom(AppConstants.FontName.medium, size: 14))
                                 .foregroundStyle(Color.white)
                                 .offset(CGSize(width: 0, height: -4))
-                            Text("\(weather.current.wind_speed) km/h")
+//                            Text("\(weather.current.wind_speed) km/h")
+                            Text("33 km/h")
                                 .font(.custom(AppConstants.FontName.medium, size: 14))
                                 .foregroundStyle(Color.white)
                         }
@@ -118,7 +124,8 @@ struct HomeView: View {
                                 .font(.custom(AppConstants.FontName.medium, size: 14))
                                 .foregroundStyle(Color.white)
                                 .offset(CGSize(width: 0, height: -4))
-                            Text("\(Int(weather.current.feels_like))°")
+//                            Text("\(Int(weather.current.feels_like))°")
+                            Text("20°")
                                 .font(.custom(AppConstants.FontName.medium, size: 14))
                                 .foregroundStyle(Color.white)
                         }
@@ -133,23 +140,30 @@ struct HomeView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(alignment: .center, spacing: 38) {
-                                ForEach(weather.daily, id: \.dt) { day in
-                                    NextWeekCardView(day: day)
-                                }
+//                                ForEach(weather.daily, id: \.dt) { day in
+//                                    NextWeekCardView(day: day)
+                                    NextWeekCardView()
+                                    NextWeekCardView()
+                                    NextWeekCardView()
+                                    NextWeekCardView()
+                                    NextWeekCardView()
+                                    NextWeekCardView()
+                                    NextWeekCardView()
+//                                }
                             }
                         }
                         .padding(.horizontal, 45)
                     }
-                } else if let error = viewModel.errorMessage {
-                    Text(error)
-                        .foregroundStyle(Color.red)
-                }
+//                } else if let error = viewModel.errorMessage {
+//                    Text(error)
+//                        .foregroundStyle(Color.red)
+//                }
                 
                 Spacer()
             }
         }
         .onAppear {
-            viewModel.fetchWeather(lat: 33.6995, lon: 73.0363) // Islamabad coordinates
+            viewModel.fetchWeather(lat: 51.5072, lon: 0.1276) // Islamabad coordinates
         }
     }
 }

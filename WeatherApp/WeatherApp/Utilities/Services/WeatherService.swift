@@ -97,7 +97,7 @@ struct Alerts: Codable {
 }
 
 class WeatherService {
-    private let apiKey = "2d8bc7c061e2c33d3861f713a3cbec18"
+    private let apiKey = "c365789139cfbd2536539a926a38715e"
     private let baseURL = "https://api.openweathermap.org/data/3.0/onecall"
     private var cancellable: AnyCancellable?
 
@@ -112,6 +112,7 @@ class WeatherService {
         ]
 
         let url = components.url!
+        
         return URLSession.shared.dataTaskPublisher(for: url)
             .map { $0.data }
             .decode(type: WeatherResponse.self, decoder: JSONDecoder())
@@ -119,4 +120,3 @@ class WeatherService {
             .eraseToAnyPublisher()
     }
 }
-
