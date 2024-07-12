@@ -8,13 +8,13 @@
 import Foundation
 import Combine
 
-struct WeatherResponse: Codable {
+struct WeatherResponse: Codable, Equatable {
     let current: CurrentWeather
     let hourly: [HourlyWeather]
     let daily: [DailyWeather]
 }
 
-struct CurrentWeather: Codable {
+struct CurrentWeather: Codable, Equatable {
     let dt: TimeInterval
     let sunrise: TimeInterval
     let sunset: TimeInterval
@@ -31,7 +31,7 @@ struct CurrentWeather: Codable {
     let weather: [Weather]
 }
 
-struct HourlyWeather: Codable, Hashable{
+struct HourlyWeather: Codable, Hashable, Equatable{
     let dt: TimeInterval
     let temp: Double
     let feels_like: Double
@@ -47,7 +47,7 @@ struct HourlyWeather: Codable, Hashable{
     let pop: Double
 }
 
-struct DailyWeather: Codable {
+struct DailyWeather: Codable, Equatable {
     let dt: TimeInterval
     let sunrise: TimeInterval
     let sunset: TimeInterval
@@ -64,7 +64,7 @@ struct DailyWeather: Codable {
     let rain: Double?
 }
 
-struct Temperature: Codable {
+struct Temperature: Codable, Equatable {
     let day: Double
     let min: Double
     let max: Double
@@ -73,21 +73,21 @@ struct Temperature: Codable {
     let morn: Double
 }
 
-struct FeelsLike: Codable {
+struct FeelsLike: Codable, Equatable {
     let day: Double
     let night: Double
     let eve: Double
     let morn: Double
 }
 
-struct Weather: Codable, Hashable {
+struct Weather: Codable, Hashable, Equatable {
     let id: Int
     let main: String
     let description: String
     let icon: String
 }
 
-struct Alerts: Codable {
+struct Alerts: Codable, Equatable {
     let sender_name: String
     let event: String
     let start: Int

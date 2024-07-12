@@ -7,23 +7,30 @@
 
 import Foundation
 
-struct CityResponse: Codable, Identifiable {
+struct CityResponse: Codable, Identifiable, Equatable {
     var id = UUID()
     let city: String
     let lat: Double
     let long: Double
     let imageUrl: String
-    
+    var weather: WeatherResponse?
+
     enum CodingKeys: String, CodingKey {
         case city
         case lat
         case long
         case imageUrl
+        case weather
     }
 }
 
-struct Cities: Codable  {
-    let cities: [CityResponse]
+struct Cities: Codable, Identifiable, Equatable  {
+    var id = UUID()
+    var cities: [CityResponse]
+    
+    enum CodingKeys: CodingKey {
+        case cities
+    }
 }
 
 func loadJson<T: Decodable>(filename fileName: String) -> T? {

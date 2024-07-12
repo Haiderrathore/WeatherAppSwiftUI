@@ -9,15 +9,11 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var viewModel = WeatherViewModel()
-    @State private var cityResponse: CityResponse?
     
     var body: some View {
         NavigationStack{
             ZStack {
-                //                Image(AppConstants.Images.bgPlaceholder)
-                //                    .resizable()
-                //                    .ignoresSafeArea()
-                AsyncImage(url: URL(string: cityResponse?.imageUrl ?? "")) { image in
+                AsyncImage(url: URL(string: viewModel.cityResponse?.imageUrl ?? "")) { image in
                     image
                         .resizable()
                         .scaledToFill()
@@ -38,7 +34,7 @@ struct HomeView: View {
                                 .resizable()
                                 .frame(width: 32, height: 32)
                             
-                            Text(cityResponse?.city ?? "Not Avalible")
+                            Text(viewModel.cityResponse?.city ?? "Not Avalible")
                                 .font(.custom(AppConstants.FontName.medium, size: 18))
                                 .foregroundStyle(Color.white)
                         }
@@ -158,14 +154,7 @@ struct HomeView: View {
                 }
             }
             .onAppear {
-                if let loadedCities: Cities = loadJson(filename: "cities") {
-                    self.cityResponse = loadedCities.cities.first
-                }
-                viewModel.fetchWeather(lat: 40.7128, lon: -74.0060)// Newyork
-//                viewModel.fetchWeather(lat: 29.7604, lon: -95.3698)// Huston
-//                viewModel.fetchWeather(lat: 19.07609, lon: -72.877426)// Mumbai
-//                viewModel.fetchWeather(lat: 55.755825, lon: -37.617298)// Moscow
-//                viewModel.fetchWeather(lat: 33.6844, lon: -73.0479)// Islamabad
+                viewModel.loadCityData()
             }
         }
     }

@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct SavedLocationsView: View {
-    @State private var cityResponse: Cities?
-    @State private var viewModel = WeatherViewModel()
+    @StateObject private var viewModel = WeatherViewModel()
     @State private var showSearchBar = false
     @State private var searchText = ""
     
@@ -59,25 +58,28 @@ struct SavedLocationsView: View {
                 }
                 VStack{
                     
-                    
                     ScrollView(.vertical, showsIndicators: false){
                         Spacer()
                             .frame(height: 10)
-                        ForEach(filteredCities) { city in
-                            SavedLocationCard(
-                                city: city.city,
-                                weatherDescription: "Clear",
-                                humidity: 56,
-                                windSpeed: 1.22,
-                                temperature: 24,
-                                weatherImageName: AppConstants.WeatherImages.night
-                            )
-                            .onTapGesture {
-                                withAnimation(.bouncy(extraBounce: 0.1)){
-                                    showSearchBar = false
+                        ForEach(viewModel.cities.cities) { city in
+                            let weather = city.weather?.current.weather.first
+                            withAnimation(.spring){
+                                SavedLocationCard(
+                                    city: city.city,
+                                    weatherDescription: weather?.main ?? "",
+                                    humidity: city.weather?.current.humidity ?? 0,
+                                    windSpeed: city.weather?.current.wind_speed ?? 0,
+                                    temperature: city.weather?.current.temp ?? 0,
+                                    weatherImageName: AppConstants.WeatherImages.night
+                                )
+                                .onTapGesture {
+                                    withAnimation(.bouncy(extraBounce: 0.1)){
+                                        showSearchBar = false
+                                    }
+                                    UIApplication.shared.endEditing()
                                 }
-                                UIApplication.shared.endEditing()
                             }
+                            
                         }
                         
                         Spacer()
@@ -85,9 +87,7 @@ struct SavedLocationsView: View {
                     }
                     .padding(.top, 20)
                     .onAppear {
-                        if let loadedCities: Cities = loadJson(filename: "cities") {
-                            self.cityResponse = loadedCities
-                        }
+                        viewModel.loadCitiesData()
                     }
                     
                     Spacer()
@@ -96,13 +96,13 @@ struct SavedLocationsView: View {
         }
     }
     
-    var filteredCities: [CityResponse] {
-        if let cities = cityResponse?.cities {
-            let filtered = searchText.isEmpty ? cities : cities.filter { $0.city.lowercased().contains(searchText.lowercased()) }
-            return filtered.sorted { $0.city.lowercased() < $1.city.lowercased() }
-        }
-        return []
-    }
+//    var filteredCities: [CityResponse] {
+//        if let cities = viewModel.cityResponse?.cities {
+//            let filtered = searchText.isEmpty ? cities : cities.filter { $0.city.lowercased().contains(searchText.lowercased()) }
+//            return filtered.sorted { $0.city.lowercased() < $1.city.lowercased() }
+//        }
+//        return viewModel.cityResponse?.cities ?? []
+//    }
 }
 
 #Preview {
