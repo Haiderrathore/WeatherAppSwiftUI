@@ -9,60 +9,66 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var viewModel = WeatherViewModel()
-    @State private var cities: CityResponse?
-    
+    @State private var cityResponse: CityResponse?
     
     var body: some View {
-        ZStack {
-            Image(AppConstants.Images.bgPlaceholder)
-                .resizable()
-                .ignoresSafeArea()
-            Image(AppConstants.Images.darkening)
-                .resizable()
-                .ignoresSafeArea()
-            
-            VStack {
-                HStack {
+        NavigationStack{
+            ZStack {
+                //                Image(AppConstants.Images.bgPlaceholder)
+                //                    .resizable()
+                //                    .ignoresSafeArea()
+                AsyncImage(url: URL(string: cityResponse?.imageUrl ?? "")) { image in
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 300)
+                        .ignoresSafeArea()
+                } placeholder: {
+                    ProgressView()
+                }
+                
+                Image(AppConstants.Images.darkening)
+                    .resizable()
+                    .ignoresSafeArea()
+                
+                VStack(alignment: .center) {
                     HStack {
-                        Image(AppConstants.Images.locationIcon)
-                            .resizable()
-                            .frame(width: 32, height: 32)
+                        HStack {
+                            Image(AppConstants.Images.locationIcon)
+                                .resizable()
+                                .frame(width: 32, height: 32)
+                            
+                            Text(cityResponse?.city ?? "Not Avalible")
+                                .font(.custom(AppConstants.FontName.medium, size: 18))
+                                .foregroundStyle(Color.white)
+                        }
+                        .padding()
                         
-                        Text("Paris")
-                            .font(.custom(AppConstants.FontName.medium, size: 18))
-                            .foregroundStyle(Color.white)
+                        Spacer()
+                        NavigationLink {
+                            SavedLocationsView()
+                        } label: {
+                            Image(AppConstants.Images.moreIcon)
+                                .resizable()
+                                .frame(width: 32, height: 32)
+                        }
+                        .padding()
+                        
+                        
                     }
-                    .padding()
+                    .padding(.horizontal, 15)
                     
                     Spacer()
-                    Button {
-                        // Action for the button
-                    } label: {
-                        Image(AppConstants.Images.moreIcon)
-                            .resizable()
-                            .frame(width: 32, height: 32)
-                    }
-                    .padding()
-                }
-                .padding(.horizontal, 15)
-                
-                Spacer()
-                
-//                if viewModel.isLoading {
-//                    ProgressView()
-//                } else if let weather = viewModel.response {
+                    //                if viewModel.isLoading {
+                    //                    ProgressView()
+                    //                } else if let weather = viewModel.response {
                     VStack {
-                        Text("JULY 07")
+                        Text(getFormattedDate())
                             .font(.custom(AppConstants.FontName.medium, size: 40))
                             .foregroundStyle(Color.white)
                         
                         HStack {
-                            Text("Updated  ")
-                                .font(.custom(AppConstants.FontName.light, size: 16))
-                                .foregroundStyle(Color.white)
-                            
-//                            Text("Date(timeIntervalSince1970: weather.current.dt).formatted()")
-                            Text("4/5/66")
+                            Text("Updated as of \(getCurrentDateTime())")
                                 .font(.custom(AppConstants.FontName.light, size: 16))
                                 .foregroundStyle(Color.white)
                         }
@@ -72,14 +78,12 @@ struct HomeView: View {
                             .scaledToFill()
                             .frame(width: 180, height: 120)
                         
-//                        Text(weather.current.weather.first?.description.capitalized ?? "N/A")
-                        Text("CLEAR")
+                        Text(viewModel.weatherResponse?.current.weather.first?.description.capitalized ?? "Not Avalible")
                             .font(.custom(AppConstants.FontName.bold, size: 40))
                             .foregroundStyle(Color.white)
                         
                         HStack(alignment: .top, spacing: 1) {
-//                            Text("\(Int(weather.current.temp))")
-                            Text("24")
+                            Text(viewModel.weatherResponse?.current.temp.rounded().toInt().toString() ?? "00")
                                 .font(.custom(AppConstants.FontName.medium, size: 86))
                                 .foregroundStyle(Color.white)
                             Text("°C")
@@ -100,8 +104,8 @@ struct HomeView: View {
                                 .font(.custom(AppConstants.FontName.medium, size: 14))
                                 .foregroundStyle(Color.white)
                                 .offset(CGSize(width: 0, height: -4))
-//                            Text("\(weather.current.humidity)%")
-                            Text("44%")
+                            //                            Text("\(weather.current.humidity)%")
+                            Text(viewModel.weatherResponse?.current.humidity.toString() ?? "00" )
                                 .font(.custom(AppConstants.FontName.medium, size: 14))
                                 .foregroundStyle(Color.white)
                         }
@@ -112,8 +116,8 @@ struct HomeView: View {
                                 .font(.custom(AppConstants.FontName.medium, size: 14))
                                 .foregroundStyle(Color.white)
                                 .offset(CGSize(width: 0, height: -4))
-//                            Text("\(weather.current.wind_speed) km/h")
-                            Text("33 km/h")
+                            //                            Text("\(weather.current.wind_speed) km/h")
+                            Text(viewModel.weatherResponse?.current.wind_speed.rounded().toInt().toString() ?? "00" )
                                 .font(.custom(AppConstants.FontName.medium, size: 14))
                                 .foregroundStyle(Color.white)
                         }
@@ -124,8 +128,8 @@ struct HomeView: View {
                                 .font(.custom(AppConstants.FontName.medium, size: 14))
                                 .foregroundStyle(Color.white)
                                 .offset(CGSize(width: 0, height: -4))
-//                            Text("\(Int(weather.current.feels_like))°")
-                            Text("20°")
+                            //                            Text("\(Int(weather.current.feels_like))°")
+                            Text(viewModel.weatherResponse?.current.feels_like.rounded().toInt().toString() ?? "00" )
                                 .font(.custom(AppConstants.FontName.medium, size: 14))
                                 .foregroundStyle(Color.white)
                         }
@@ -140,32 +144,48 @@ struct HomeView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(alignment: .center, spacing: 38) {
-//                                ForEach(weather.daily, id: \.dt) { day in
-//                                    NextWeekCardView(day: day)
-                                    NextWeekCardView()
-                                    NextWeekCardView()
-                                    NextWeekCardView()
-                                    NextWeekCardView()
-                                    NextWeekCardView()
-                                    NextWeekCardView()
-                                    NextWeekCardView()
-//                                }
+                                ForEach(viewModel.weatherResponse?.hourly.prefix(10) ?? [], id: \.self) {  hourly in
+                                    
+                                    NextHoursCardView(hourly: hourly)
+                                    
+                                }
                             }
                         }
                         .padding(.horizontal, 45)
                     }
-//                } else if let error = viewModel.errorMessage {
-//                    Text(error)
-//                        .foregroundStyle(Color.red)
-//                }
-                
-                Spacer()
+                    
+                    Spacer()
+                }
+            }
+            .onAppear {
+                if let loadedCities: Cities = loadJson(filename: "cities") {
+                    self.cityResponse = loadedCities.cities.first
+                }
+                viewModel.fetchWeather(lat: 40.7128, lon: -74.0060)// Newyork
+//                viewModel.fetchWeather(lat: 29.7604, lon: -95.3698)// Huston
+//                viewModel.fetchWeather(lat: 19.07609, lon: -72.877426)// Mumbai
+//                viewModel.fetchWeather(lat: 55.755825, lon: -37.617298)// Moscow
+//                viewModel.fetchWeather(lat: 33.6844, lon: -73.0479)// Islamabad
             }
         }
-        .onAppear {
-            viewModel.fetchWeather(lat: 51.5072, lon: 0.1276) // Islamabad coordinates
-        }
     }
+    
+    
+    func getCurrentDateTime() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "M/d/yyyy h:mm a"
+        return dateFormatter.string(from: Date())
+    }
+    
+    func getFormattedDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMMM dd"
+        let dateString = dateFormatter.string(from: Date())
+        return dateString.uppercased()
+    }
+    
+    
+    
 }
 
 #Preview {

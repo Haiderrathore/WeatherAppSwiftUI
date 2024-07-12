@@ -31,7 +31,7 @@ struct CurrentWeather: Codable {
     let weather: [Weather]
 }
 
-struct HourlyWeather: Codable {
+struct HourlyWeather: Codable, Hashable{
     let dt: TimeInterval
     let temp: Double
     let feels_like: Double
@@ -80,7 +80,7 @@ struct FeelsLike: Codable {
     let morn: Double
 }
 
-struct Weather: Codable {
+struct Weather: Codable, Hashable {
     let id: Int
     let main: String
     let description: String

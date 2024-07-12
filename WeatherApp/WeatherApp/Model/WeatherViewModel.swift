@@ -32,7 +32,6 @@ class WeatherViewModel: ObservableObject {
                 }
             }, receiveValue: { weatherResponse in
                 self.weatherResponse = weatherResponse
-//                print("Weather Fetched  \(weatherResponse)")
 
             })
             .store(in: &cancellables)

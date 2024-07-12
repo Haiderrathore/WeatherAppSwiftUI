@@ -12,7 +12,7 @@ struct CityResponse: Codable, Identifiable {
     let city: String
     let lat: Double
     let long: Double
-    let imageUrl: String?
+    let imageUrl: String
     
     enum CodingKeys: String, CodingKey {
         case city

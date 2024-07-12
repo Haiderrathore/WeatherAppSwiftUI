@@ -1,7 +1,7 @@
 
 {
     "cities": [
-        {"city": "New York", "lat": 40.7128, "long": -74.0060, "imageUrl": ""},
+        {"city": "New York", "lat": 40.7128, "long": -74.0060, "imageUrl": "https://en.wikipedia.org/wiki/New_York_City#/media/File:Liberty02.jpg"},
         {"city": "Los Angeles", "lat": 34.0522, "long": -118.2437, "imageUrl": ""},
         {"city": "Chicago", "lat": 41.8781, "long": -87.6298, "imageUrl": ""},
         {"city": "Houston", "lat": 29.7604, "long": -95.3698, "imageUrl": ""},
@@ -17,7 +17,6 @@
         {"city": "São Paulo", "lat": -23.55052, "long": -46.633308, "imageUrl": ""},
         {"city": "Mexico City", "lat": 19.432608, "long": -99.133209, "imageUrl": ""},
         {"city": "Cairo", "lat": 30.04442, "long": 31.235712, "imageUrl": ""},
-        {"city": "Mumbai", "lat": 19.07609, "long": 72.877426, "imageUrl": ""},
         {"city": "Beijing", "lat": 39.904202, "long": 116.407394, "imageUrl": ""},
         {"city": "Dhaka", "lat": 23.810331, "long": 90.412521, "imageUrl": ""},
         {"city": "Osaka", "lat": 34.693737, "long": 135.502167, "imageUrl": ""},
