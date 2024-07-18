@@ -9,7 +9,7 @@ import Combine
 import SwiftUI
 
 class WeatherViewModel: ObservableObject {
-    @Published var cities: Cities = Cities(cities: [])
+    @Published var cities: [CityResponse] = []
     @Published var isLoading = true
     @Published var errorMessage: String?
 
@@ -18,42 +18,50 @@ class WeatherViewModel: ObservableObject {
 
     private var weatherService = WeatherService()
     private var cancellables = Set<AnyCancellable>()
+
+    init() {
+        loadCitiesFromJson()
+    }
+
+    func loadCitiesFromJson() {
+        guard let loadedCities: Cities = loadJson(filename: "cities") else {
+            print("Failed to load cities data")
+            return
+        }
+        cities = loadedCities.cities.sorted { $0.city.lowercased() < $1.city.lowercased() }
+    }
     
     func loadCityData() {
-        guard let loadedCities: Cities = loadJson(filename: "cities") else { return }
-        let sortredCities = loadedCities.cities.sorted { $0.city.lowercased() < $1.city.lowercased() }
-        if let newCity = sortredCities.first {
-            self.cityResponse = newCity
-            self.fetchWeather(lat: newCity.lat, lon: newCity.long) { result in
-                switch result {
-                case .success(let weather):
-                    self.weatherResponse = weather
-                case .failure(let failure):
-                    print(failure)
-                }
+        if let savedCity = UserDefaults.standard.string(forKey: "SelectedCity"),
+           let city = cities.first(where: {$0.city == savedCity}) {
+            if let savedCityResponse: CityResponse = UserDefaults.standard.getCodable(CityResponse.self, forKey: "savedCityResponse") {
+                self.cityResponse = savedCityResponse
+                self.weatherResponse = savedCityResponse.weather
+            } else {
+                getWeatherFor(city: city)
             }
+        } else {
+            guard let city = cities.first else { return }
+            getWeatherFor(city: city)
         }
     }
     
-//    func loadCitiesData() {
-//        guard let loadedCities: Cities = loadJson(filename: "cities") else { return }
-//        let sortredCities = loadedCities.cities.sorted { $0.city.lowercased() < $1.city.lowercased() }
-//
-//        sortredCities.enumerated().forEach { index, city in
-//            var newCity = city
-//            self.fetchWeather(lat: newCity.lat, lon: newCity.long) { result in
-//                switch result {
-//                case .success(let weather):
-//                    newCity.weather = weather
-//                    self.cityResponse?.cities.append(newCity) // Reassign to trigger update
-//                    self.cityResponse = Cities(cities: self.cityResponse?.cities.sorted { $0.city.lowercased() < $1.city.lowercased() } ?? [])
-//                case .failure(let failure):
-//                    print(failure)
-//                }
-//            }
-//        }
-//    }
+    private func getWeatherFor(city: CityResponse) {
+        self.cityResponse = city
 
+        self.fetchWeather(lat: city.lat, lon: city.long) { result in
+            switch result {
+            case .success(let weather):
+                self.weatherResponse = weather
+                self.cityResponse?.weather = weather
+                if let cityResponse = self.cityResponse {
+                    UserDefaults.standard.setCodable(cityResponse, forKey: "savedCityResponse")
+                }
+            case .failure(let failure):
+                print(failure)
+            }
+        }
+    }
 
     func loadCitiesData() {
         guard let loadedCities: Cities = loadJson(filename: "cities") else { return }
@@ -80,15 +88,16 @@ class WeatherViewModel: ObservableObject {
             .sink { completion in
                 switch completion {
                 case .finished:
+                    print("")
                     // All requests finished successfully
-                    self.cities = Cities(cities: self.cities.cities.sorted { $0.city.lowercased() < $1.city.lowercased() } ?? [])
+//                    self.cities = Cities(cities: self.cities.cities.sorted { $0.city.lowercased() < $1.city.lowercased() })
                 case .failure(let error):
                     print("Failed to fetch weather for all cities: \(error)")
                 }
             } receiveValue: { cityWeatherPairs in
                 // Update cityResponse with fetched weather
                 for (city, weather) in cityWeatherPairs {
-                    var updatedCities = self.cities.cities
+                    var updatedCities = self.cities
                     if updatedCities.isEmpty {
                         updatedCities = sortedCities
                     }
@@ -97,13 +106,12 @@ class WeatherViewModel: ObservableObject {
                     } else {
                         print("City not found: \(city.city)")
                     }
-                    self.cities.cities = updatedCities
+                    self.cities = updatedCities
                 }
             }
             .store(in: &cancellables)
     }
 
-    
     func fetchWeather(lat: Double, lon: Double, completion: @escaping ((Result<WeatherResponse, Error>) -> Void)) {
         isLoading = true
         weatherService.fetchWeather(lat: lat, lon: lon)
@@ -111,15 +119,29 @@ class WeatherViewModel: ObservableObject {
                 self.isLoading = false
                 switch completion {
                 case .failure(let error):
-                    print("Error Fetching Weather.")
+                    print("Error Fetching Weather:", error)
                     self.errorMessage = error.localizedDescription
                 case .finished:
-                    print("Weather Fetched.")
+//                    print("Weather Fetched.")
                     break
                 }
             }, receiveValue: { weatherResponse in
                 completion(.success(weatherResponse))
             })
             .store(in: &cancellables)
+    }
+    
+    func loadJson<T: Decodable>(filename fileName: String) -> T? {
+        if let url = Bundle.main.url(forResource: "CityData", withExtension: "json") {
+            do {
+                let data = try Data(contentsOf: url)
+                let decoder = JSONDecoder()
+                let jsonData = try decoder.decode(T.self, from: data)
+                return jsonData
+            } catch {
+                print("error:\(error)")
+            }
+        }
+        return nil
     }
 }

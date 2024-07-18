@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 struct WeatherResponse: Codable, Equatable {
     let current: CurrentWeather
@@ -82,7 +83,7 @@ struct FeelsLike: Codable, Equatable {
 
 struct Weather: Codable, Hashable, Equatable {
     let id: Int
-    let main: String
+    let main: WeatherCondition
     let description: String
     let icon: String
 }
@@ -94,6 +95,60 @@ struct Alerts: Codable, Equatable {
     let end: Int
     let description: String
     let tags: String
+}
+
+enum WeatherCondition: String, Codable {
+    case Rain
+    case Clouds
+    case Thunderstorm
+    case Drizzle
+    case Snow
+    case Mist
+    case Smoke
+    case Clear
+    case Haze
+    case Dust
+    case Fog
+    case Sand
+    case Ash
+    case Squall
+    case Tornado
+    
+    
+    var icon: Image {
+        switch self {
+        case .Rain:
+            return Image(AppConstants.Images.windIcon)
+        case .Clouds:
+            return Image(AppConstants.Images.windIcon)
+        case .Thunderstorm:
+            return Image(AppConstants.Images.windIcon)
+        case .Drizzle:
+            return Image(AppConstants.Images.windIcon)
+        case .Snow:
+            return Image(AppConstants.Images.windIcon)
+        case .Mist:
+            return Image(AppConstants.Images.windIcon)
+        case .Smoke:
+            return Image(AppConstants.Images.windIcon)
+        case .Clear:
+            return Image(AppConstants.Images.windIcon)
+        case .Haze:
+            return Image(AppConstants.Images.windIcon)
+        case .Dust:
+            return Image(AppConstants.Images.windIcon)
+        case .Fog:
+            return Image(AppConstants.Images.windIcon)
+        case .Sand:
+            return Image(AppConstants.Images.windIcon)
+        case .Ash:
+            return Image(AppConstants.Images.windIcon)
+        case .Squall:
+            return Image(AppConstants.Images.windIcon)
+        case .Tornado:
+            return Image(AppConstants.Images.windIcon)
+        }
+    }
 }
 
 class WeatherService {

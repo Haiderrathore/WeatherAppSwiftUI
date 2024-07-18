@@ -9,9 +9,10 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var viewModel = WeatherViewModel()
-    
+    @State private var isSavedLocationViewPresented = false
+//    @State private var selectedCityResponse: CityResponse?
     var body: some View {
-        NavigationStack{
+        NavigationStack(){
             ZStack {
                 AsyncImage(url: URL(string: viewModel.cityResponse?.imageUrl ?? "")) { image in
                     image
@@ -41,8 +42,8 @@ struct HomeView: View {
                         .padding()
                         
                         Spacer()
-                        NavigationLink {
-                            SavedLocationsView()
+                        Button {
+                            isSavedLocationViewPresented = true
                         } label: {
                             Image(AppConstants.Images.moreIcon)
                                 .resizable()
@@ -65,11 +66,11 @@ struct HomeView: View {
                         
                         HStack {
                             Text("Updated as of \(getCurrentDateTime())")
-                                .font(.custom(AppConstants.FontName.light, size: 16))
+                                .font(.custom(AppConstants.FontName.light, size: 18))
                                 .foregroundStyle(Color.white)
                         }
                         
-                        Image(AppConstants.WeatherImages.night)
+                        Image(viewModel.weatherResponse?.current.weather.first?.main.rawValue)
                             .resizable()
                             .scaledToFill()
                             .frame(width: 180, height: 120)
@@ -97,36 +98,36 @@ struct HomeView: View {
                         VStack {
                             Image(AppConstants.Images.humidityIcon)
                             Text("HUMIDITY")
-                                .font(.custom(AppConstants.FontName.medium, size: 14))
+                                .font(.custom(AppConstants.FontName.medium, size: 16))
                                 .foregroundStyle(Color.white)
                                 .offset(CGSize(width: 0, height: -4))
                             //                            Text("\(weather.current.humidity)%")
                             Text(viewModel.weatherResponse?.current.humidity.toString() ?? "00" )
-                                .font(.custom(AppConstants.FontName.medium, size: 14))
+                                .font(.custom(AppConstants.FontName.medium, size: 18))
                                 .foregroundStyle(Color.white)
                         }
                         Spacer()
                         VStack {
                             Image(AppConstants.Images.windIcon)
                             Text("WIND")
-                                .font(.custom(AppConstants.FontName.medium, size: 14))
+                                .font(.custom(AppConstants.FontName.medium, size: 16))
                                 .foregroundStyle(Color.white)
                                 .offset(CGSize(width: 0, height: -4))
                             //                            Text("\(weather.current.wind_speed) km/h")
                             Text(viewModel.weatherResponse?.current.wind_speed.rounded().toInt().toString() ?? "00" )
-                                .font(.custom(AppConstants.FontName.medium, size: 14))
+                                .font(.custom(AppConstants.FontName.medium, size: 18))
                                 .foregroundStyle(Color.white)
                         }
                         Spacer()
                         VStack {
                             Image(AppConstants.Images.tempratureIcon)
                             Text("FEELS LIKE")
-                                .font(.custom(AppConstants.FontName.medium, size: 14))
+                                .font(.custom(AppConstants.FontName.medium, size: 16))
                                 .foregroundStyle(Color.white)
                                 .offset(CGSize(width: 0, height: -4))
                             //                            Text("\(Int(weather.current.feels_like))°")
                             Text(viewModel.weatherResponse?.current.feels_like.rounded().toInt().toString() ?? "00" )
-                                .font(.custom(AppConstants.FontName.medium, size: 14))
+                                .font(.custom(AppConstants.FontName.medium, size: 18))
                                 .foregroundStyle(Color.white)
                         }
                     }
@@ -140,21 +141,31 @@ struct HomeView: View {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(alignment: .center, spacing: 38) {
+                                
+                                
                                 ForEach(viewModel.weatherResponse?.hourly.prefix(10) ?? [], id: \.self) {  hourly in
                                     
                                     NextHoursCardView(hourly: hourly)
                                     
                                 }
+                                
+                                Spacer()
+                                    .frame(width: 2)
                             }
                         }
-                        .padding(.horizontal, 45)
+                        .padding(.horizontal, 50)
                     }
                     
                     Spacer()
                 }
             }
             .onAppear {
-                viewModel.loadCityData()
+                if viewModel.cityResponse == nil {
+                    viewModel.loadCityData()
+                }
+            }
+            .navigationDestination(isPresented: $isSavedLocationViewPresented) {
+                SavedLocationsView(selectedCityResponse: $viewModel.cityResponse)
             }
         }
     }
@@ -172,9 +183,6 @@ struct HomeView: View {
         let dateString = dateFormatter.string(from: Date())
         return dateString.uppercased()
     }
-    
-    
-    
 }
 
 #Preview {

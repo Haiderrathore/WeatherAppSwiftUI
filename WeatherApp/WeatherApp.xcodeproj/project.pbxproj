@@ -28,6 +28,7 @@
 		1DC4C37E2C37B31E00C27EE1 /* SavedLocationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC4C37D2C37B31E00C27EE1 /* SavedLocationCard.swift */; };
 		1DC5C78E2C3D5C880059F3C7 /* CityData.json in Resources */ = {isa = PBXBuildFile; fileRef = 1DC5C78D2C3D5C880059F3C7 /* CityData.json */; };
 		1DC5C7902C3D602A0059F3C7 /* CitiesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DC5C78F2C3D602A0059F3C7 /* CitiesModel.swift */; };
+		1DDD2E312C494F8700F1AE51 /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DDD2E302C494F8700F1AE51 /* UserDefaults+Extension.swift */; };
 		1DE7F9892C3841CB0043178F /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DE7F9882C3841CB0043178F /* WeatherService.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		1DC4C37D2C37B31E00C27EE1 /* SavedLocationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedLocationCard.swift; sourceTree = "<group>"; };
 		1DC5C78D2C3D5C880059F3C7 /* CityData.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = CityData.json; sourceTree = "<group>"; };
 		1DC5C78F2C3D602A0059F3C7 /* CitiesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesModel.swift; sourceTree = "<group>"; };
+		1DDD2E302C494F8700F1AE51 /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
 		1DE7F9882C3841CB0043178F /* WeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -182,6 +184,7 @@
 				1DB267C32C3E86920050716C /* Double+Extension.swift */,
 				1DB267C52C3E86C60050716C /* Int+Extension.swift */,
 				1DB267C72C3EDCBD0050716C /* UIApplication+Extension.swift */,
+				1DDD2E302C494F8700F1AE51 /* UserDefaults+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 				1DC4C37E2C37B31E00C27EE1 /* SavedLocationCard.swift in Sources */,
 				1DE7F9892C3841CB0043178F /* WeatherService.swift in Sources */,
 				1DB267C62C3E86C60050716C /* Int+Extension.swift in Sources */,
+				1DDD2E312C494F8700F1AE51 /* UserDefaults+Extension.swift in Sources */,
 				1DC4C3682C36BA4000C27EE1 /* HomeView.swift in Sources */,
 				1D73718A2C3BED0E00BADA63 /* LocationManager.swift in Sources */,
 				1DC4C3572C36B34000C27EE1 /* ContentView.swift in Sources */,

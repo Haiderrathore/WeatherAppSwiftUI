@@ -17,6 +17,7 @@ struct SavedLocationCard: View {
 
     var body: some View {
         ZStack {
+            
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.getThemeColor(color: .homeSubbg).opacity(0.6))
                 .frame(width: 345, height: 153)

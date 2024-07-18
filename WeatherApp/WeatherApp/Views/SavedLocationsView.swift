@@ -11,7 +11,8 @@ struct SavedLocationsView: View {
     @StateObject private var viewModel = WeatherViewModel()
     @State private var showSearchBar = false
     @State private var searchText = ""
-    
+    @Binding var selectedCityResponse: CityResponse?
+    @Environment(\.presentationMode) var presentationMode
     var body: some View {
         
         ZStack{
@@ -61,25 +62,29 @@ struct SavedLocationsView: View {
                     ScrollView(.vertical, showsIndicators: false){
                         Spacer()
                             .frame(height: 10)
-                        ForEach(viewModel.cities.cities) { city in
-                            let weather = city.weather?.current.weather.first
-                            withAnimation(.spring){
+                        ForEach(viewModel.cities) { city in
+                            let weatherData = city.weather?.current.weather.first
+                 
+//                            NavigationLink(destination: HomeView(cityName: city.city)) {
+//
                                 SavedLocationCard(
                                     city: city.city,
-                                    weatherDescription: weather?.main ?? "",
+                                    weatherDescription: weatherData?.main.rawValue ?? "",
                                     humidity: city.weather?.current.humidity ?? 0,
                                     windSpeed: city.weather?.current.wind_speed ?? 0,
                                     temperature: city.weather?.current.temp ?? 0,
                                     weatherImageName: AppConstants.WeatherImages.night
                                 )
                                 .onTapGesture {
+                                    saveCityToUserDefaults(city.city)
+                                    selectedCityResponse = city
                                     withAnimation(.bouncy(extraBounce: 0.1)){
                                         showSearchBar = false
                                     }
                                     UIApplication.shared.endEditing()
+                                    presentationMode.wrappedValue.dismiss()
                                 }
                             }
-                            
                         }
                         
                         Spacer()
@@ -95,16 +100,17 @@ struct SavedLocationsView: View {
             }
         }
     }
-    
-//    var filteredCities: [CityResponse] {
-//        if let cities = viewModel.cityResponse?.cities {
-//            let filtered = searchText.isEmpty ? cities : cities.filter { $0.city.lowercased().contains(searchText.lowercased()) }
-//            return filtered.sorted { $0.city.lowercased() < $1.city.lowercased() }
-//        }
-//        return viewModel.cityResponse?.cities ?? []
-//    }
-}
 
-#Preview {
-    SavedLocationsView()
-}
+    private func saveCityToUserDefaults(_ cityName: String) {
+        UserDefaults.standard.set(cityName, forKey: "SelectedCity")
+        UserDefaults.standard.synchronize()
+    }
+
+    func HomeViewNavigation() {
+
+    }
+
+
+//#Preview {
+//    SavedLocationsView(selectedCity: sel)
+//}
